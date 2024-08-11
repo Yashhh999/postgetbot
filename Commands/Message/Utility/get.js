@@ -45,9 +45,9 @@ module.exports = {
 
             const { caption, videoUrl } = postData;
 
-            if (caption) {
-                message.channel.send(`Caption: \n \`\`\`${caption}\`\`\``);
-            }
+          //  if (caption) {
+              //  message.channel.send(`Caption: \n \`\`\`${caption}\`\`\``);
+           // }
 
             if (videoUrl) {
                 const response = await axios.get(videoUrl, { responseType: 'arraybuffer' });

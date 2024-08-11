@@ -1,4 +1,4 @@
-const { CommandInteraction, ApplicationCommandType, PermissionFlagsBits, Client, AttachmentBuilder , ApplicationCommandOptionType } = require("discord.js");
+const { CommandInteraction, ApplicationCommandType, PermissionFlagsBits, Client, AttachmentBuilder, ApplicationCommandOptionType } = require("discord.js");
 const axios = require('axios');
 const { ApifyClient } = require('apify-client');
 
@@ -16,6 +16,13 @@ module.exports = {
             type: ApplicationCommandOptionType.String, 
             required: true,
         },
+        {
+            name: 'sendcaption',
+            description: 'Whether to send the caption along with the media',
+            type: ApplicationCommandOptionType.Boolean,
+            required: false,
+            
+        },
     ],
 
     /**
@@ -25,6 +32,8 @@ module.exports = {
      */
     run: async (client, interaction) => {
         const instagramURL = interaction.options.getString('url');
+        const sendCaption = interaction.options.getBoolean('sendcaption') || false;
+
         await interaction.deferReply();
 
         let formattedURL = instagramURL.split('?')[0];
@@ -52,7 +61,7 @@ module.exports = {
 
             const { caption, videoUrl } = postData;
 
-            if (caption) {
+            if (sendCaption && caption) {
                 await interaction.editReply(`Caption: \n \`\`\`${caption}\`\`\``);
             }
 
