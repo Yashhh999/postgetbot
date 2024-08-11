@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@discordjs/rest": "^0.4.0-dev.1648166871.cedd053",
+    "apify-client": "^2.9.4",
     "ascii-table": "^0.0.9",
     "chalk": "^2.4.1",
     "discord-api-types": "^0.30.0",
