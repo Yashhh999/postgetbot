@@ -7,7 +7,7 @@ const app = express()
   res.send(`Ready to Uptime!`);
 });
 
-app.listen(3000, () => {
+app.listen(4000, () => {
  console.log("^⁠_⁠^ : Express Working")
 });
 

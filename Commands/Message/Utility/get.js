@@ -18,14 +18,14 @@ module.exports = {
      */
     run: async (client, message, args, prefix) => {
         if (!args[0]) return message.reply("Please provide an Instagram post URL!");
-
+        const apifyToken=process.env.APIFY_TOKEN;
         let instagramURL = args[0];
         message.delete();
 
         instagramURL = instagramURL.split('?')[0];
 
         const apifyClient = new ApifyClient({
-            token: 'apify_api_B0fuZn57Fi0PA7EbLs6O8cCTGC5S82009LO3',  
+            token: apifyToken,  
         });
         message.channel.send("Fetching Instagram post data...");
 

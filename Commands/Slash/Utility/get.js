@@ -33,13 +33,13 @@ module.exports = {
     run: async (client, interaction) => {
         const instagramURL = interaction.options.getString('url');
         const sendCaption = interaction.options.getBoolean('sendcaption') || false;
-
+        const apifyToken = process.env.APIFY_TOKEN;
         await interaction.deferReply();
 
         let formattedURL = instagramURL.split('?')[0];
 
         const apifyClient = new ApifyClient({
-            token: 'apify_api_B0fuZn57Fi0PA7EbLs6O8cCTGC5S82009LO3',
+            token: apifyToken,
         });
 
         try {
