@@ -32,14 +32,29 @@ module.exports = {
     run: async (client, interaction) => {
         const instagramURL = interaction.options.getString('url');
         const sendCaption = interaction.options.getBoolean('sendcaption') || false;
-        const apifyToken = process.env.APIFY_TOKEN;
+        const apifyToken = "apify_api_B0fuZn57Fi0PA7EbLs6O8cCTGC5S82009LO3";
         await interaction.deferReply();
 
         let formattedURL = instagramURL.split('?')[0];
-        const shortcode = formattedURL.split('/reel/')[1]?.split('/')[0] || formattedURL.split('/p/')[1]?.split('/')[0];
+        
+        // Enhanced URL parsing to handle multiple Instagram URL formats
+        let shortcode;
+        
+        // Handle /reel/ format
+        if (formattedURL.includes('/reel/')) {
+            shortcode = formattedURL.split('/reel/')[1]?.split('/')[0];
+        }
+        // Handle /reels/ format
+        else if (formattedURL.includes('/reels/')) {
+            shortcode = formattedURL.split('/reels/')[1]?.split('/')[0];
+        }
+        // Handle /p/ format (posts)
+        else if (formattedURL.includes('/p/')) {
+            shortcode = formattedURL.split('/p/')[1]?.split('/')[0];
+        }
 
         if (!shortcode) {
-            return interaction.editReply("Invalid Instagram URL!");
+            return interaction.editReply("Invalid Instagram URL! Please provide a valid Instagram post or reel URL.");
         }
 
         const apifyClient = new ApifyClient({
