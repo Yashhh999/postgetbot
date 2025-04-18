@@ -21,7 +21,6 @@ module.exports = {
             description: 'Whether to send the caption along with the media',
             type: ApplicationCommandOptionType.Boolean,
             required: false,
-            
         },
     ],
 
@@ -37,17 +36,17 @@ module.exports = {
         await interaction.deferReply();
 
         let formattedURL = instagramURL.split('?')[0];
+        const shortcode = formattedURL.split('/reel/')[1]?.split('/')[0] || formattedURL.split('/p/')[1]?.split('/')[0];
+
+        if (!shortcode) {
+            return interaction.editReply("Invalid Instagram URL!");
+        }
 
         const apifyClient = new ApifyClient({
             token: apifyToken,
         });
 
         try {
-            const shortcode = formattedURL.split('/reel/')[1]?.split('/')[0];
-            if (!shortcode) {
-                return interaction.editReply("Invalid Instagram post URL!");
-            }
-
             const { defaultDatasetId } = await apifyClient.actor("apify/instagram-scraper").call({
                 directUrls: [`https://www.instagram.com/reel/${shortcode}/`],
             });
