@@ -18,25 +18,26 @@ module.exports = {
      */
     run: async (client, message, args, prefix) => {
         if (!args[0]) return message.reply("Please provide an Instagram post URL!");
-        const apifyToken=process.env.APIFY_TOKEN;
+        const apifyToken = process.env.APIFY_TOKEN;
         let instagramURL = args[0];
         message.delete();
 
         instagramURL = instagramURL.split('?')[0];
 
+        const shortcode = instagramURL.split('/reel/')[1]?.split('/')[0] || instagramURL.split('/p/')[1]?.split('/')[0];
+
+        if (!shortcode) return message.reply("Invalid Instagram URL!");
+
         const apifyClient = new ApifyClient({
-            token: apifyToken,  
+            token: apifyToken,
         });
+
         message.channel.send("Fetching Instagram post data...");
 
         try {
-            const shortcode = instagramURL.split('/reel/')[1]?.split('/')[0];
-            if (!shortcode) return message.reply("Invalid Instagram post URL!");
-
             const { defaultDatasetId } = await apifyClient.actor("apify/instagram-scraper").call({
                 directUrls: [`https://www.instagram.com/reel/${shortcode}/`],
             });
-
 
             const { items } = await apifyClient.dataset(defaultDatasetId).listItems();
             const postData = items[0];
@@ -45,9 +46,9 @@ module.exports = {
 
             const { caption, videoUrl } = postData;
 
-          //  if (caption) {
-              //  message.channel.send(`Caption: \n \`\`\`${caption}\`\`\``);
-           // }
+            if (caption) {
+                message.channel.send(`Caption: \n \`\`\`${caption}\`\`\``);
+            }
 
             if (videoUrl) {
                 const response = await axios.get(videoUrl, { responseType: 'arraybuffer' });
